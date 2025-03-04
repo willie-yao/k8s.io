@@ -14,14 +14,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+variable "resource_group_name" {
+  type = string
+}
+
+variable "location" {
+  type = string
+}
+
 variable "subscription_id" {
   type = string
 }
 
 # Create the "capz-monitoring" resource group
 resource "azurerm_resource_group" "capz-monitoring" {
-  location = "eastus"
-  name     = "capz-monitoring"
+  location = var.location
+  name     = var.resource_group_name
   tags = {
     DO-NOT-DELETE     = "contact capz"
     creationTimestamp = "2024-10-24T00:00:00Z"
@@ -29,7 +37,7 @@ resource "azurerm_resource_group" "capz-monitoring" {
 }
 
 resource "azurerm_resource_group" "MC_capz-monitoring_capz-monitoring_eastus" {
-  location = "eastus"
+  location = var.location
   name     = "MC_capz-monitoring_capz-monitoring_eastus"
   tags = {
     DO-NOT-DELETE     = "contact capz"
@@ -51,10 +59,10 @@ resource "azurerm_role_assignment" "monitoring_reader" {
 }
 
 resource "azurerm_kubernetes_cluster" "capz-monitoring" {
-  dns_prefix            = "capz-monitoring"
-  location              = azurerm_resource_group.capz-monitoring.location
-  name                  = "capz-monitoring"
-  resource_group_name   = azurerm_resource_group.capz-monitoring.name
+  dns_prefix            = var.resource_group_name
+  location              = var.location
+  name                  = var.resource_group_name
+  resource_group_name   = var.resource_group_name
   node_resource_group = azurerm_resource_group.MC_capz-monitoring_capz-monitoring_eastus.name
   tags = {
     DO-NOT-DELETE     = "contact capz"
