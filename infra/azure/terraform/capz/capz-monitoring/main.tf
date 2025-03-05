@@ -36,15 +36,6 @@ resource "azurerm_resource_group" "capz-monitoring" {
   }
 }
 
-resource "azurerm_resource_group" "MC_capz-monitoring_capz-monitoring_eastus" {
-  location = var.location
-  name     = "MC_capz-monitoring_capz-monitoring_eastus"
-  tags = {
-    DO-NOT-DELETE     = "contact capz"
-    creationTimestamp = "2024-10-24T00:00:00Z"
-  }
-}
-
 resource "azurerm_user_assigned_identity" "capz_monitoring_user_identity" {
   name                = "capz-monitoring-user-identity"
   location            = azurerm_resource_group.capz-monitoring.location
@@ -63,7 +54,6 @@ resource "azurerm_kubernetes_cluster" "capz-monitoring" {
   location              = var.location
   name                  = var.resource_group_name
   resource_group_name   = var.resource_group_name
-  node_resource_group = azurerm_resource_group.MC_capz-monitoring_capz-monitoring_eastus.name
   tags = {
     DO-NOT-DELETE     = "contact capz"
     creationTimestamp = "2024-10-24T00:00:00Z"
